@@ -136,13 +136,19 @@ body{
     }
     .navbar {
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-end;
       align-items: center;
       background-color: #8d5f8d;
       padding: 10px 20px;
       color: white;
-      position: relative; /* Keeps the absolute menu positioned correctly */
+      position: fixed; 
+      top: 0;
+      left: 0; /* Ensures it starts from the left edge */
+      width: 100%; /* Forces the bar to span the full screen */
+      z-index: 1000; /* Keeps it on top of other elements */
+      box-sizing: border-box; /* Prevents padding from breaking width */
     }
+
 
 
     /* The Hamburger Icon (Three Lines) */
@@ -169,7 +175,7 @@ body{
       flex-direction: column;
       width: 100%;
       background-color: #8d5f8d;
-      position: absolute;
+      position: fixed;
       top: 41px; /* Aligns right below the navbar */
       left: 0;
       z-index: 10;
@@ -195,7 +201,12 @@ body{
       padding: 20px;
     }
     /* Image adjust for images inside the boxes sectiona */
-   
+    body {
+      /* Adjust this value based on the total height of your navbar */
+      padding-top: 60px; 
+      margin: 0; /* Prevents default browser gaps */
+    }
+
 
 
 </style>

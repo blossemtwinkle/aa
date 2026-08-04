@@ -13,15 +13,21 @@
       font-family: Arial, sans-serif;
       margin: 0;
     }
-    .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: #8d5f8d;
-      padding: 10px 20px;
-      color: white;
-      position: relative; /* Keeps the absolute menu positioned correctly */
+.navbar {
+     display: flex;
+     justify-content: flex-end;
+     align-items: center;
+     background-color: #8d5f8d;
+     padding: 10px 20px;
+     color: white;
+     position: fixed; 
+     top: 0;
+     left: 0; /* Ensures it starts from the left edge */
+     width: 100%; /* Forces the bar to span the full screen */
+     z-index: 1000; /* Keeps it on top of other elements */
+     box-sizing: border-box; /* Prevents padding from breaking width */
     }
+
 
 
     /* The Hamburger Icon (Three Lines) */
@@ -32,6 +38,7 @@
       width: 30px;
       height: 21px;
       cursor: pointer;
+      top: 0px;
     }
     .hamburger .line {
       height: 3px;
@@ -48,10 +55,10 @@
       flex-direction: column;
       width: 100%;
       background-color: #8d5f8d;
-      position: absolute;
+      position: fixed;
       top: 41px; /* Aligns right below the navbar */
       left: 0;
-      z-index: 10;
+      z-index: 999;
     }
     .nav-links a {
       color: white;
@@ -79,6 +86,12 @@
     text-align: center;
     background: #f5f5f5;
 }
+
+    body {
+      /* Adjust this value based on the total height of your navbar */
+      padding-top: 60px; 
+      margin: 0; /* Prevents default browser gaps */
+    }
 
 
 h1 {

@@ -3,26 +3,225 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Good Plan Better Life - Weekly Planner</title>
-
+  <title>Record & Study Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
+    * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background-color: #f0f0f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.dashboard-container {
+  display: flex;
+  width: 100%;
+  max-width: 920px;
+  background-color: #f2e2f7;
+  border: 2px solid #333;
+  border-radius: 12px;
+  padding: 20px;
+  gap: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.main-content {
+  flex: 1;
+  background-color: #ffffff;
+  border: 2px solid #555;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.panel-header {
+  background-color: #55aaff;
+  color: #333;
+  font-weight: bold;
+  text-align: center;
+  padding: 12px;
+  font-size: 1.1rem;
+  border-bottom: 2px solid #555;
+}
+
+.panel-body {
+  padding: 20px;
+  flex: 1;
+}
+
+.view {
+  display: none;
+}
+
+.view.active {
+  display: block;
+}
+
+.subtitle {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 15px;
+}
+
+/* Form Styles */
+.input-form {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+}
+
+.input-form input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  flex: 1;
+  min-width: 120px;
+}
+
+.input-form button {
+  padding: 8px 12px;
+  background-color: #55aaff;
+  border: 1px solid #333;
+  border-radius: 4px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.input-form button:hover {
+  background-color: #3388dd;
+}
+
+.secondary-btn {
+  background-color: #888 !important;
+}
+
+.secondary-btn:hover {
+  background-color: #666 !important;
+}
+
+/* Lined Table Style */
+.table-container table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.table-container th, .table-container td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: left;
+}
+
+/* Editable region visual indicator */
+[contenteditable="true"] {
+  outline: none;
+  border-bottom: 1px dashed #aaa;
+}
+
+[contenteditable="true"]:focus {
+  background-color: #f0f8ff;
+  border-bottom: 2px solid #55aaff;
+}
+
+.delete-btn {
+  background-color: #ff5555;
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.delete-btn:hover {
+  background-color: #cc0000;
+}
+
+/* Homework Cards */
+.subject-card {
+  border: 2px solid #666;
+  border-radius: 6px;
+  padding: 15px;
+  margin-bottom: 12px;
+  background-color: #fafafa;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+/* Side Control Panel */
+.side-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  justify-content: center;
+  width: 130px;
+}
+
+.nav-btn {
+  padding: 10px 15px;
+  background-color: #ffffff;
+  border: 2px solid #555;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.nav-btn:hover {
+  background-color: #e0e0e0;
+}
+
+.nav-btn.active {
+  background-color: #c0f3c0;
+  border-color: #2e7d32;
+}
+
+.chart-container {
+  position: relative;
+  width: 100%;
+  max-height: 300px;
+}
+
+    /* Basic Reset & Navbar Layout */
     body {
       font-family: Arial, sans-serif;
       margin: 0;
-      text-align: center;
-      background: #f5f5f5;
+    }
+.navbar {
+     display: flex;
+     justify-content: flex-end;
+     align-items: center;
+     background-color: #8d5f8d;
+     padding: 10px 20px;
+     color: white;
+     position: fixed; 
+     top: 0;
+     left: 0; /* Ensures it starts from the left edge */
+     width: 100%; /* Forces the bar to span the full screen */
+     z-index: 1000; /* Keeps it on top of other elements */
+     box-sizing: border-box; /* Prevents padding from breaking width */
     }
 
-    .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: #8d5f8d;
-      padding: 10px 20px;
-      color: white;
-      position: relative;
-    }
 
+
+    /* The Hamburger Icon (Three Lines) */
     .hamburger {
       display: flex;
       flex-direction: column;
@@ -30,26 +229,28 @@
       width: 30px;
       height: 21px;
       cursor: pointer;
+      top: 0px;
     }
-
     .hamburger .line {
       height: 3px;
       width: 100%;
       background-color: white;
       border-radius: 2px;
+      transition: 0.3s;
     }
 
+
+    /* Navigation Links Menu */
     .nav-links {
-      display: none;
+      display: none; /* Hidden by default */
       flex-direction: column;
       width: 100%;
       background-color: #8d5f8d;
-      position: absolute;
-      top: 41px;
+      position: fixed;
+      top: 41px; /* Aligns right below the navbar */
       left: 0;
-      z-index: 10;
+      z-index: 999;
     }
-
     .nav-links a {
       color: white;
       padding: 15px;
@@ -57,215 +258,359 @@
       text-align: center;
       border-bottom: 1px solid #555;
     }
-
-    .nav-links.active {
-      display: flex;
-    }
-
-    h1 {
-      color: #444;
-      margin-top: 20px;
-    }
-
-    table {
-      margin: 20px auto;
-      border-collapse: collapse;
-    }
-
-    th, td {
-      border: 1px solid black;
-      width: 140px;
-      height: 40px;
-    }
-
-    th {
-      background: pink;
-    }
-
-    input {
-      width: 95%;
-      height: 80%;
-      border: none;
-      text-align: center;
-      background: transparent;
-      font-size: 0.95rem;
-    }
-
-    input:focus {
-      outline: 1px solid #8d5f8d;
-      background: #fff;
-    }
-
-    .time-input {
-      font-weight: bold;
-    }
-
-    #saveBtn {
-      padding: 10px 20px;
-      font-size: 1rem;
+    .nav-links a:hover {
       background-color: #8d5f8d;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      margin-bottom: 30px;
     }
 
-    #saveBtn:hover {
-      background-color: #724872;
+
+    /* JavaScript Toggle Class */
+    .nav-links.active {
+      display: flex; /* Shows menu when button is clicked */
     }
+   
+    .content {
+      padding: 20px;
+    }
+    /* This style is for 'schedule-container' */
+    body {
+    font-family: Arial;
+    text-align: center;
+    background: #f5f5f5;
+    }
+
+    body {
+      /* Adjust this value based on the total height of your navbar */
+      padding-top: 60px; 
+      margin: 0; /* Prevents default browser gaps */
+    }
+
   </style>
 </head>
 <body>
+          <!--Nav button for hamburger menu-->
+ <nav class="navbar">
+   <div class="logo"></div>
+ 
+   <!-- Hamburger Button -->
+   <div class="hamburger" id="hamburgerBtn">
+     <div class="line"></div>
+     <div class="line"></div>
+     <div class="line"></div>
+   </div>
 
-  <nav class="navbar">
-    <div class="logo"></div>
-    <div class="hamburger" id="hamburgerBtn">
-      <div class="line"></div>
-      <div class="line"></div>
-      <div class="line"></div>
-    </div>
 
-    <div class="nav-links" id="navLinks">
-      <a href="index.html">Home</a>
-      <a href="schedule.html">Schedule</a>
-      <a href="time.html">Time</a>
-      <a href="record.html">Record</a>
-    </div>
-  </nav>
 
-  <h1>Good Plan Better Life Weekly Planner</h1>
 
-  <table id="timetable">
-    <thead>
-      <tr>
-        <th>Time</th>
-        <th>Monday</th>
-        <th>Tuesday</th>
-        <th>Wednesday</th>
-        <th>Thursday</th>
-        <th>Friday</th>
-      </tr>
-    </thead>
-    <tbody id="tableBody"></tbody>
-  </table>
+   <!-- Menu Items (Connected to actual files) -->
+   <div class="nav-links" id="navLinks">
+     <a href="index.html">Home</a>
+     <a href="schedule.html">Schedule</a>
+     <a href="time.html">Time</a>
+     <a href="record.html">Record</a>
+   </div>
+ </nav>
 
-  <button id="saveBtn">Save Schedule</button>
 
+ <!-- JavaScript to make the click work (nav) -->
+ <script>
+   const hamburgerBtn = document.getElementById('hamburgerBtn');
+   const navLinks = document.getElementById('navLinks');
+
+
+
+
+   hamburgerBtn.addEventListener('click', () => {
+     navLinks.classList.toggle('active');
+   });
+ </script>
+
+
+
+  <div class="dashboard-container">
+    <main class="main-content">
+      <div id="panel-header" class="panel-header">Record</div>
+      
+      <div class="panel-body">
+        
+        <section id="sleep-view" class="view active">
+          <h3>Sleep Tracking Log</h3>
+          
+          <div class="input-form">
+            <input type="date" id="sleep-date" />
+            <input type="number" id="sleep-hours" placeholder="Hours (e.g. 8)" step="0.5" />
+            <input type="text" id="sleep-quality" placeholder="Quality (e.g. Good)" />
+            <button id="add-sleep-btn">Add Sleep Entry</button>
+          </div>
+
+          <div class="table-container">
+            <table id="sleep-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Hours Slept</th>
+                  <th>Quality</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td contenteditable="true">2026-08-01</td>
+                  <td contenteditable="true">7.5</td>
+                  <td contenteditable="true">Good</td>
+                  <td><button class="delete-btn">Delete</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="time-view" class="view">
+          <h3>Distance vs. Time Journey</h3>
+          
+          <div class="input-form">
+            <input type="text" id="graph-time" placeholder="Time (e.g. 15:00)" />
+            <input type="number" id="graph-distance" placeholder="Distance (km)" />
+            <button id="add-point-btn">Add Data Point</button>
+            <button id="clear-journey-btn" class="secondary-btn">Clear Graph Data</button>
+          </div>
+
+          <div class="chart-container">
+            <canvas id="distanceChart"></canvas>
+          </div>
+        </section>
+
+        <section id="homework-view" class="view">
+          <h3>Homework & Self-Study Tasks</h3>
+          
+          <div class="input-form">
+            <input type="text" id="hw-subject" placeholder="Subject Name" />
+            <input type="text" id="hw-task" placeholder="Task Description" />
+            <button id="add-hw-btn">Add Subject Task</button>
+          </div>
+
+          <div id="homework-list">
+            <div class="subject-card">
+              <div class="card-header">
+                <h4 contenteditable="true">Math</h4>
+                <button class="delete-btn">Delete</button>
+              </div>
+              <p contenteditable="true">Calculus practice problems & algebra review.</p>
+            </div>
+            <div class="subject-card">
+              <div class="card-header">
+                <h4 contenteditable="true">English</h4>
+                <button class="delete-btn">Delete</button>
+              </div>
+              <p contenteditable="true">Essay draft on modern literature.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="graph-view" class="view">
+          <h3>Sleep Duration Over Time</h3>
+          <p class="subtitle">Visualizing sleep hours logged from the Sleep Record section.</p>
+          <div class="chart-container">
+            <canvas id="sleepChart"></canvas>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <aside class="side-panel">
+      <button class="nav-btn active" data-target="sleep-view" data-title="Record - Sleep Log">Sleep</button>
+      <button class="nav-btn" data-target="time-view" data-title="Record - Distance vs Time">Time</button>
+      <button class="nav-btn" data-target="homework-view" data-title="Homework - Information and study/self study">Homework</button>
+      <button class="nav-btn" data-target="graph-view" data-title="Record - Sleep vs Time Analytics">Graph</button>
+    </aside>
+  </div>
   <script>
-    // 1. Navigation Hamburger Toggle
-    const hamburgerBtn = document.getElementById('hamburgerBtn');
-    const navLinks = document.getElementById('navLinks');
+    document.addEventListener("DOMContentLoaded", () => {
+  const navButtons = document.querySelectorAll(".nav-btn");
+  const views = document.querySelectorAll(".view");
+  const panelHeader = document.getElementById("panel-header");
 
-    hamburgerBtn.addEventListener('click', () => {
-      navLinks.classList.toggle('active');
+  // Navigation switching logic
+  navButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      navButtons.forEach((b) => b.classList.remove("active"));
+      views.forEach((v) => v.classList.remove("active"));
+
+      btn.classList.add("active");
+      const targetView = document.getElementById(btn.getAttribute("data-target"));
+      if (targetView) targetView.classList.add("active");
+
+      panelHeader.textContent = btn.getAttribute("data-title");
+
+      // Update sleep analytics chart whenever user views the Graph tab
+      if (btn.getAttribute("data-target") === "graph-view") {
+        updateSleepChart();
+      }
     });
+  });
 
-    // 2. Dynamically Generate Table Rows with Editable Time & Day Inputs
-    const tableBody = document.getElementById("tableBody");
+  // 1. SLEEP LOG MANAGEMENT
+  const addSleepBtn = document.getElementById("add-sleep-btn");
+  const sleepTable = document.getElementById("sleep-table").querySelector("tbody");
 
-    for (let hour = 8; hour <= 17; hour++) {
-      let row = tableBody.insertRow();
+  addSleepBtn.addEventListener("click", () => {
+    const date = document.getElementById("sleep-date").value;
+    const hours = document.getElementById("sleep-hours").value;
+    const quality = document.getElementById("sleep-quality").value;
 
-      // Time Column (Editable)
-      let timeCell = row.insertCell();
-      let timeInput = document.createElement("input");
-      timeInput.type = "text";
-      timeInput.value = `${hour}:00`;
-      timeInput.className = "time-input";
-      timeCell.appendChild(timeInput);
+    if (date && hours && quality) {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td contenteditable="true">${date}</td>
+        <td contenteditable="true">${hours}</td>
+        <td contenteditable="true">${quality}</td>
+        <td><button class="delete-btn">Delete</button></td>
+      `;
+      sleepTable.appendChild(tr);
 
-      // Days 1 to 5 Columns (Monday - Friday)
-      for (let day = 1; day <= 5; day++) {
-        let cell = row.insertCell();
-        let input = document.createElement("input");
-        input.type = "text";
-        input.placeholder = "Type here";
-        cell.appendChild(input);
-      }
+      document.getElementById("sleep-date").value = "";
+      document.getElementById("sleep-hours").value = "";
+      document.getElementById("sleep-quality").value = "";
     }
+  });
 
-    // 3. Automatically Load Saved Data When Page Opens or User Navigates Back
-    window.addEventListener("DOMContentLoaded", loadSchedule);
-
-    function loadSchedule() {
-      const savedSchedule = JSON.parse(localStorage.getItem("user_schedule"));
-
-      if (savedSchedule && savedSchedule.length > 0) {
-        const rows = tableBody.rows;
-
-        savedSchedule.forEach(item => {
-          if (rows[item.rowIndex]) {
-            // Restore custom time slot
-            const timeInput = rows[item.rowIndex].cells[0].querySelector("input");
-            if (timeInput && item.time) timeInput.value = item.time;
-
-            // Restore day task
-            const taskInput = rows[item.rowIndex].cells[item.dayIndex].querySelector("input");
-            if (taskInput && item.task !== undefined) taskInput.value = item.task;
-          }
-        });
-      }
-
-      // Restore scroll position
-      const savedY = localStorage.getItem("scrollY");
-      if (savedY !== null) {
-        window.scrollTo(0, parseInt(savedY));
-      }
+  sleepTable.addEventListener("click", (e) => {
+    if (e.target.classList.contains("delete-btn")) {
+      e.target.closest("tr").remove();
     }
+  });
 
-    // 4. Save Function
-    document.getElementById("saveBtn").addEventListener("click", saveSchedule);
+  // 2. HOMEWORK TASK MANAGEMENT
+  const addHwBtn = document.getElementById("add-hw-btn");
+  const homeworkList = document.getElementById("homework-list");
 
-    function saveSchedule() {
-      let schedule = [];
-      let rows = tableBody.rows;
+  addHwBtn.addEventListener("click", () => {
+    const subject = document.getElementById("hw-subject").value;
+    const task = document.getElementById("hw-task").value;
 
-      for (let i = 0; i < rows.length; i++) {
-        let timeVal = rows[i].cells[0].querySelector("input").value;
+    if (subject && task) {
+      const card = document.createElement("div");
+      card.className = "subject-card";
+      card.innerHTML = `
+        <div class="card-header">
+          <h4 contenteditable="true">${subject}</h4>
+          <button class="delete-btn">Delete</button>
+        </div>
+        <p contenteditable="true">${task}</p>
+      `;
+      homeworkList.appendChild(card);
 
-        for (let j = 1; j <= 5; j++) {
-          let taskVal = rows[i].cells[j].querySelector("input").value;
+      document.getElementById("hw-subject").value = "";
+      document.getElementById("hw-task").value = "";
+    }
+  });
 
-          schedule.push({
-            rowIndex: i,
-            dayIndex: j,
-            time: timeVal,
-            task: taskVal
-          });
+  // Delete Homework Item
+  homeworkList.addEventListener("click", (e) => {
+    if (e.target.classList.contains("delete-btn")) {
+      e.target.closest(".subject-card").remove();
+    }
+  });
+
+  // 3. TIME / DISTANCE GRAPH LOGIC
+  const ctxDistance = document.getElementById("distanceChart").getContext("2d");
+  const distanceChart = new Chart(ctxDistance, {
+    type: "line",
+    data: {
+      labels: ["09:00", "10:00", "11:00", "12:00", "12:30", "13:00"],
+      datasets: [
+        {
+          label: "Distance (km)",
+          data: [0, 10, 20, 20, 60, 40],
+          borderColor: "#2196F3",
+          borderWidth: 2,
+          fill: false,
+          tension: 0,
+          pointBackgroundColor: "#e91e63",
+          pointRadius: 4,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: { title: { display: true, text: "Distance (km)" }, min: 0 },
+        x: { title: { display: true, text: "Time" } },
+      },
+    },
+  });
+
+  document.getElementById("add-point-btn").addEventListener("click", () => {
+    const timeVal = document.getElementById("graph-time").value;
+    const distVal = document.getElementById("graph-distance").value;
+
+    if (timeVal && distVal !== "") {
+      distanceChart.data.labels.push(timeVal);
+      distanceChart.data.datasets[0].data.push(Number(distVal));
+      distanceChart.update();
+
+      document.getElementById("graph-time").value = "";
+      document.getElementById("graph-distance").value = "";
+    }
+  });
+
+  document.getElementById("clear-journey-btn").addEventListener("click", () => {
+    distanceChart.data.labels = [];
+    distanceChart.data.datasets[0].data = [];
+    distanceChart.update();
+  });
+
+  // 4. SLEEP VS TIME ANALYTICS GRAPH
+  const ctxSleep = document.getElementById("sleepChart").getContext("2d");
+  const sleepChart = new Chart(ctxSleep, {
+    type: "bar",
+    data: {
+      labels: [],
+      datasets: [
+        {
+          label: "Sleep Duration (Hours)",
+          data: [],
+          backgroundColor: "rgba(85, 170, 255, 0.6)",
+          borderColor: "#55aaff",
+          borderWidth: 2,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: { title: { display: true, text: "Hours Slept" }, min: 0, max: 12 },
+        x: { title: { display: true, text: "Date / Time" } },
+      },
+    },
+  });
+
+  // Function to pull logged sleep data into graph visualization
+  function updateSleepChart() {
+    const rows = sleepTable.querySelectorAll("tr");
+    const labels = [];
+    const dataPoints = [];
+
+    rows.forEach((row) => {
+      const cells = row.querySelectorAll("td");
+      if (cells.length >= 2) {
+        const dateText = cells[0].innerText.trim();
+        const hoursText = parseFloat(cells[1].innerText.trim());
+
+        if (dateText && !isNaN(hoursText)) {
+          labels.push(dateText);
+          dataPoints.push(hoursText);
         }
       }
-
-      // Save to browser memory so it stays when navigating pages
-      localStorage.setItem("user_schedule", JSON.stringify(schedule));
-
-      alert("Schedule Saved Successfully!");
-
-      // Optional: Send data to Python backend
-      sendDataToPython(schedule);
-    }
-
-    // 5. Python API Sender (Failsafe)
-    async function sendDataToPython(scheduleData) {
-      try {
-        await fetch('http://localhost:5000/api/data', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ schedule: scheduleData })
-        });
-      } catch (err) {
-        console.log("Local Python server offline; saved locally in browser.");
-      }
-    }
-
-    // 6. Save Scroll Position
-    let timeout;
-    window.addEventListener("scroll", () => {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => {
-        localStorage.setItem("scrollY", window.scrollY);
-      }, 200);
     });
+
+    sleepChart.data.labels = labels;
+    sleepChart.data.datasets[0].data = dataPoints;
+    sleepChart.update();
+  }
+});
   </script>
+
+  <script src="script.js"></script>
 </body>
 </html>
