@@ -1,0 +1,52 @@
+{
+    "mon": [
+        {
+            "subject": "",
+            "time": "",
+            "dueDate": ""
+        },
+        {
+            "subject": "",
+            "time": "",
+            "dueDate": ""
+        }
+    ],
+    "tue": [
+        {
+            "subject": "",
+            "time": "",
+            "dueDate": ""
+        }
+    ],
+    "wed": [
+        {
+            "subject": "math",
+            "time": "12:00 to 1:00",
+            "dueDate": ""
+        },
+        {
+            "subject": "",
+            "time": "",
+            "dueDate": ""
+        },
+        {
+            "subject": "",
+            "time": "",
+            "dueDate": ""
+        }
+    ],
+    "thu": [
+        {
+            "subject": "",
+            "time": "",
+            "dueDate": ""
+        }
+    ],
+    "fri": [
+        {
+            "subject": "",
+            "time": "",
+            "dueDate": ""
+        }
+    ]
+}
