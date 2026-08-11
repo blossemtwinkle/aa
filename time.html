@@ -1,382 +1,362 @@
 <!DOCTYPE html>
-<HTML lang="en">
+<html lang="en">
 <head>
-    <title>Time</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Good Plan Better Life</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Good Plan Better Life - Time</title>
 
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding-top: 70px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-<style>
-    /* Basic Reset & Navbar Layout */
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-    }
-.navbar {
-     display: flex;
-     justify-content: flex-end;
-     align-items: center;
-     background-color: #8d5f8d;
-     padding: 10px 20px;
-     color: white;
-     position: fixed; 
-     top: 0;
-     left: 0; /* Ensures it starts from the left edge */
-     width: 100%; /* Forces the bar to span the full screen */
-     z-index: 1000; /* Keeps it on top of other elements */
-     box-sizing: border-box; /* Prevents padding from breaking width */
-    }
+        .navbar {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            background-color: #8d5f8d;
+            padding: 10px 20px;
+            color: white;
+            position: fixed; 
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            box-sizing: border-box;
+        }
 
+        .hamburger {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 21px;
+            cursor: pointer;
+        }
 
+        .hamburger .line {
+            height: 3px;
+            width: 100%;
+            background-color: white;
+            border-radius: 2px;
+        }
 
-    /* The Hamburger Icon (Three Lines) */
-    .hamburger {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      width: 30px;
-      height: 21px;
-      cursor: pointer;
-      top: 0px;
-    }
-    .hamburger .line {
-      height: 3px;
-      width: 100%;
-      background-color: white;
-      border-radius: 2px;
-      transition: 0.3s;
-    }
+        .nav-links {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+            background-color: #8d5f8d;
+            position: fixed;
+            top: 41px;
+            left: 0;
+            z-index: 999;
+        }
 
+        .nav-links a {
+            color: white;
+            padding: 15px;
+            text-decoration: none;
+            text-align: center;
+            border-bottom: 1px solid #7a4f7a;
+        }
 
-    /* Navigation Links Menu */
-    .nav-links {
-      display: none; /* Hidden by default */
-      flex-direction: column;
-      width: 100%;
-      background-color: #8d5f8d;
-      position: fixed;
-      top: 41px; /* Aligns right below the navbar */
-      left: 0;
-      z-index: 999;
-    }
-    .nav-links a {
-      color: white;
-      padding: 15px;
-      text-decoration: none;
-      text-align: center;
-      border-bottom: 1px solid #555;
-    }
-    .nav-links a:hover {
-      background-color: #8d5f8d;
-    }
+        .nav-links.active { display: flex; }
 
+        .timetable-outer-box {
+            background-color: #f0d5f2;
+            border: 2px solid #555;
+            border-radius: 12px;
+            padding: 20px;
+            width: 90%;
+            max-width: 1100px;
+            margin-bottom: 30px;
+        }
 
-    /* JavaScript Toggle Class */
-    .nav-links.active {
-      display: flex; /* Shows menu when button is clicked */
-    }
-   
-    .content {
-      padding: 20px;
-    }
-    /* This style is for 'schedule-container' */
-    body {
-    font-family: Arial;
-    text-align: center;
-    background: #f5f5f5;
-}
+        .time-header {
+            background-color: #ff80bf;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.3rem;
+            padding: 16px;
+            border: 1.5px solid #333;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
 
-    body {
-      /* Adjust this value based on the total height of your navbar */
-      padding-top: 60px; 
-      margin: 0; /* Prevents default browser gaps */
-    }
+        .days-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+            align-items: start;
+        }
 
+        .day-column {
+            border: 1.5px solid #333;
+            border-radius: 8px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
 
-h1 {
-    color: #444;
-}
+        .mon { background-color: #ffd6d6; }
+        .tue { background-color: #ffe3c2; }
+        .wed { background-color: #ffffc2; }
+        .thu { background-color: #d1f7d1; }
+        .fri { background-color: #d1e8ff; }
 
+        .day-column h3 { text-align: center; margin: 0; }
 
-table {
-    margin: auto;
-    border-collapse: collapse;
-}
+        .item-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
 
+        .schedule-item {
+            background: rgba(255, 255, 255, 0.85);
+            border: 1px solid #777;
+            border-radius: 6px;
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
 
-th,
-td {
-    border: 1px solid black;
-    width: 140px;
-    height: 40px;
-}
+        .schedule-item input {
+            width: 90%;
+            padding: 5px;
+            font-size: 0.8rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
 
+        .add-btn {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 6px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
 
-th {
-    background: pink;
-}
+        .delete-btn {
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 3px 6px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            align-self: flex-end;
+        }
 
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
 
-input {
-    width: 95%;
-    border: none;
-    text-align: center;
-}
+        .save-btn {
+            background-color: #4CAF50;
+            color: white;
+            font-size: 1rem;
+            font-weight: bold;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
 
+        /* Message box appearing directly underneath submit button */
+        .save-alert {
+            display: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 0.95rem;
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+            box-sizing: border-box;
+        }
 
+        .save-alert.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
 
-
-</style>
-
-
+        .save-alert.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
 <body>
 
+    <nav class="navbar">
+        <div class="hamburger" id="hamburgerBtn">
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+        </div>
 
-  <nav class="navbar">
-    <div class="logo"></div>
-   
-    <!-- Hamburger Button -->
-    <div class="hamburger" id="hamburgerBtn">
-      <div class="line"></div>
-      <div class="line"></div>
-      <div class="line"></div>
+        <div class="nav-links" id="navLinks">
+            <a href="index.html">Home</a>
+            <a href="schedule.html">Schedule</a>
+            <a href="time.html">Time</a>
+            <a href="record.html">Record</a>
+        </div>
+    </nav>
+
+    <div class="timetable-outer-box">
+        <div class="time-header">Good Plan Better Life: Time</div>
+
+        <div class="days-container">
+            <div class="day-column mon">
+                <h3>Mon</h3>
+                <div id="mon-list" class="item-container"></div>
+                <button class="add-btn" onclick="addScheduleBox('mon')">+ Add Class / Meeting</button>
+            </div>
+
+            <div class="day-column tue">
+                <h3>Tue</h3>
+                <div id="tue-list" class="item-container"></div>
+                <button class="add-btn" onclick="addScheduleBox('tue')">+ Add Class / Meeting</button>
+            </div>
+
+            <div class="day-column wed">
+                <h3>Wed</h3>
+                <div id="wed-list" class="item-container"></div>
+                <button class="add-btn" onclick="addScheduleBox('wed')">+ Add Class / Meeting</button>
+            </div>
+
+            <div class="day-column thu">
+                <h3>Thu</h3>
+                <div id="thu-list" class="item-container"></div>
+                <button class="add-btn" onclick="addScheduleBox('thu')">+ Add Class / Meeting</button>
+            </div>
+
+            <div class="day-column fri">
+                <h3>Fri</h3>
+                <div id="fri-list" class="item-container"></div>
+                <button class="add-btn" onclick="addScheduleBox('fri')">+ Add Class / Meeting</button>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="save-btn" onclick="saveSchedule()">Save Schedule</button>
+            <div id="saveAlert" class="save-alert"></div>
+        </div>
     </div>
 
+    <script>
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const navLinks = document.getElementById('navLinks');
+        hamburgerBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
 
-    <!-- Menu Items (Connected to actual files) -->
-    <div class="nav-links" id="navLinks">
-      <a href="index.html">Home</a>
-      <a href="schedule.html">Schedule</a>
-      <a href="time.html">Time</a>
-      <a href="record.html">Record</a>
-    </div>
-  </nav>
+        function addScheduleBox(dayId, itemData = { subject: '', time: '', dueDate: '' }) {
+            const container = document.getElementById(`${dayId}-list`);
+            const entryCard = document.createElement('div');
+            entryCard.className = 'schedule-item';
 
+            entryCard.innerHTML = `
+                <input type="text" class="item-subject" placeholder="Subject / Class" value="${itemData.subject || ''}">
+                <input type="text" class="item-time" placeholder="Start Time (14:30)" value="${itemData.time || ''}">
+                <input type="text" class="item-due" placeholder="Details / Due Date" value="${itemData.dueDate || ''}">
+                <button class="delete-btn" onclick="this.parentElement.remove()">✕ Remove</button>
+            `;
 
+            container.appendChild(entryCard);
+        }
 
+        function loadSchedule() {
+            const savedData = localStorage.getItem('myTimetable');
+            const schedule = savedData ? JSON.parse(savedData) : {};
+            const days = ['mon', 'tue', 'wed', 'thu', 'fri'];
 
-  <!-- JavaScript to make the click work -->
-  <script>
-    const hamburgerBtn = document.getElementById('hamburgerBtn');
-    const navLinks = document.getElementById('navLinks');
+            days.forEach(day => {
+                const container = document.getElementById(`${day}-list`);
+                container.innerHTML = '';
 
+                if (schedule[day] && schedule[day].length > 0) {
+                    schedule[day].forEach(item => addScheduleBox(day, item));
+                } else {
+                    addScheduleBox(day);
+                }
+            });
+        }
 
-    hamburgerBtn.addEventListener('click', () => {
-      navLinks.classList.toggle('active');
-    });
+        async function saveSchedule() {
+            const days = ['mon', 'tue', 'wed', 'thu', 'fri'];
+            const timetableData = {};
 
+            days.forEach(day => {
+                timetableData[day] = [];
+                const dayContainer = document.getElementById(`${day}-list`);
+                const items = dayContainer.getElementsByClassName('schedule-item');
 
-  </script>
- 
-<h1>Good Plan Better Life Weekly Planner</h1>
+                Array.from(items).forEach(item => {
+                    const subject = item.querySelector('.item-subject').value;
+                    const time = item.querySelector('.item-time').value;
+                    const dueDate = item.querySelector('.item-due').value;
 
-
-<table id="timetable">
-    <tr>
-        <th>Time</th>
-        <th>Monday</th>
-        <th>Tuesday</th>
-        <th>Wednesday</th>
-        <th>Thursday</th>
-        <th>Friday</th>
-    </tr>
-</table>
-
-
-<button id="saveBtn">
-    Save Schedule
-</button>
-
-
-<script src="script.js"></script>
-
-
-</body>
-</html>
-
-
-<!--Javascript code for schedule container class-->
-<script>
-const table = document.getElementById("timetable");
-
-
-for (let hour = 8; hour <= 17; hour++) {
-
-
-    let row = table.insertRow();
-
-
-    let timeCell = row.insertCell();
-
-
-    timeCell.innerText = `${hour}:00`;
-
-
-    for (let day = 0; day < 5; day++) {
-
-
-        let cell = row.insertCell();
-
-
-        let input = document.createElement("input");
-
-
-        input.placeholder = "Type here";
-
-
-        cell.appendChild(input);
-    }
-}
-
-
-
-
-</script>
-
-
-<script>
-    document.getElementById("saveBtn")
-.addEventListener("click", saveSchedule);
-
-
-function saveSchedule() {
-
-
-    let schedule = [];
-
-
-    let rows = table.rows;
-
-
-    for (let i = 1; i < rows.length; i++) {
-
-
-        let time = rows[i].cells[0].innerText;
-
-
-        for (let j = 1; j <= 5; j++) {
-
-
-            let text =
-                rows[i]
-                .cells[j]
-                .querySelector("input")
-                .value;
-
-
-            if (text !== "") {
-
-
-                schedule.push({
-                    day: j,
-                    time: time,
-                    task: text
+                    if (subject || time || dueDate) {
+                        timetableData[day].push({ subject, time, dueDate });
+                    }
                 });
+            });
+
+            // Save in Browser localStorage
+            localStorage.setItem('myTimetable', JSON.stringify(timetableData));
+
+            const alertBox = document.getElementById('saveAlert');
+
+            // Send to Python Backend
+            try {
+                const response = await fetch('http://127.0.0.1:5000/api/save-notify', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ value: timetableData })
+                });
+
+                if (response.ok) {
+                    const resData = await response.json();
+                    alertBox.className = "save-alert success";
+                    alertBox.innerText = resData.message || "Schedule saved successfully to Python backend!";
+                } else {
+                    throw new Error("Server error");
+                }
+            } catch (error) {
+                // Shows if Python server is offline but still saves locally
+                alertBox.className = "save-alert success";
+                alertBox.innerText = "Schedule saved locally on your browser!";
             }
+
+            // Display message box underneath submit button
+            alertBox.style.display = 'block';
+
+            // Hide automatically after 4 seconds
+            setTimeout(() => {
+                alertBox.style.display = 'none';
+            }, 4000);
         }
-    }
 
-
-    localStorage.setItem(
-        "schedule",
-        JSON.stringify(schedule)
-    );
-
-
-    alert("Schedule Saved!");
-}
-</script>
-
-
-<script>
-    setInterval(checkReminder, 60000);
-
-
-function checkReminder() {
-
-
-    let data =
-        JSON.parse(
-            localStorage.getItem("schedule")
-        ) || [];
-
-
-    let now = new Date();
-
-
-    let day = now.getDay();
-
-
-    let hour = now.getHours();
-
-
-    let currentTime = `${hour}:00`;
-
-
-    data.forEach(item => {
-
-
-        if (
-            item.day === day &&
-            item.time === currentTime
-        ) {
-            alert(
-                "Reminder: " +
-                item.task
-            );
-        }
-    });
-}
-</script>
-
-
-<script>
-    async function sendData() {
-    const response = await fetch('http://localhost:5000/api/data', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ value: 'Hello Python' })
-    });
-    const data = await response.json();
-    console.log(data.result);
-}
-sendData();
-
-
-</script>
-
-<script>
-let timeout;
-
-window.addEventListener("scroll", () => {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => {
-        // FIXED: Corrected the quotation marks and separated the key and value
-        localStorage.setItem("scrollY", window.scrollY);
-    }, 200);
-});
-
-// FIXED: Corrected the arrow function syntax ()> to () =>
-window.addEventListener("load", () => {
-    // FIXED: Changed scrollY to savedY in the if-statement to check the retrieved value
-    const savedY = localStorage.getItem("scrollY");
-    if (savedY !== null) {
-        // FIXED: Corrected window.scrollTp to window.scrollTo
-        window.scrollTo(0, parseInt(savedY));
-    }
-});
-
-</script>
-   
-
-
-
-
+        window.onload = loadSchedule;
+    </script>
 </body>
 </html>
-   
-</body>
-</head>    
-</HTML>
-
